@@ -57,7 +57,7 @@ void initializeWithCache() {
 __int32 testWithoutCache() {
     volatile __int32 cycles;
     volatile int i = 0;
-    __m128i data;
+   __m128i data;
 
     cycles = start();
 
@@ -78,10 +78,10 @@ volatile __int32 testWithCache() {
     cycles = start();
 
     for (; i < 200; i++) {
-        data = _mm_loadu_si128((__m128i*)(Array) + i);
+        data = _mm_load_si128((__m128i*)(Array) + i);
     }
     for (; i < 200; i++) {
-        data = _mm_loadu_si128((__m128i*)(Array) + i);
+        data = _mm_load_si128((__m128i*)(Array) + i);
     }
 
     cycles = stop(cycles);
@@ -120,13 +120,9 @@ int main()
     }
     int latency = 0;
     int j = 0;
-    for (int i = 0; i < 200; i++) {
-        if (i >= 10) {
-            //latency = testWithCache();
-            latency = testWithoutCache();
-            j++;
-        }
-    }
+    //latency = testWithCache();
+    latency = testWithoutCache();
+    j++;
     printf("%d\n", latency);
     latency -= base;
     printf("Latency:.............%d clock cycles (%f ns)", latency, latency / BASE_CLOCK);
