@@ -45,6 +45,7 @@ void initializeWithCache() {
         delete[800] Array;
         Array = new int[800];
     }
+
     for (int i = 0; i < 800; i++) {
         Array[i] = i;
         if (i % 4 == 0 && i > 0) {
@@ -55,7 +56,8 @@ void initializeWithCache() {
 }
 
 __int32 testWithoutCache() {
-    volatile __int32 cycles;
+    volatile __int32 cycles1;
+
     volatile int i = 0;
    __m128i data;
 
@@ -64,6 +66,7 @@ __int32 testWithoutCache() {
     for (; i < 200; i++) {
         __m128i data = _mm_stream_load_si128((__m128i*)(Array) + i);
     }
+    i = 0;
     for (; i < 200; i++) {
         __m128i data = _mm_stream_load_si128((__m128i*)(Array) + i);
     }
@@ -80,6 +83,7 @@ volatile __int32 testWithCache() {
     for (; i < 200; i++) {
         data = _mm_load_si128((__m128i*)(Array) + i);
     }
+    i = 0;
     for (; i < 200; i++) {
         data = _mm_load_si128((__m128i*)(Array) + i);
     }
@@ -90,8 +94,8 @@ volatile __int32 testWithCache() {
 
 int main()
 {
-    //initializeWithCache();
-    initializeWithoutCache();
+    initializeWithCache();
+    //initializeWithoutCache();
     unsigned base = 0;
     __int32 cyc = 0;
     //Cache warming for timer func
@@ -120,8 +124,8 @@ int main()
     }
     int latency = 0;
     int j = 0;
-    //latency = testWithCache();
-    latency = testWithoutCache();
+    latency = testWithCache();
+    //latency = testWithoutCache();
     j++;
     printf("%d\n", latency);
     latency -= base;
