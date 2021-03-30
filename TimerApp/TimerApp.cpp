@@ -5,12 +5,12 @@ using namespace std;
 int* Array;
 //Clock frequency in Ghz
 const float BASE_CLOCK = 3.56;
-const int SIZE = 1200; // Must divide by 4
+const int SIZE = 800; // Must divide by 4
 
 __int32 start() {
     __int32  cycles;
     __asm {
-        CPUID
+        LFENCE
         RDTSC
         mov cycles, eax
     }
@@ -20,7 +20,7 @@ __int32 start() {
 __int32 stop(int startCycles) {
     __int32  cycles = startCycles;
     __asm {
-        CPUID
+        LFENCE
         RDTSC
         sub eax, cycles
         mov cycles, eax
@@ -95,24 +95,24 @@ int main()
     volatile int latency = 0;
     //Cache warming for timer func
     __asm {
-        CPUID
+        LFENCE
         RDTSC
         mov cyc, eax
-        CPUID
+        LFENCE
         RDTSC
         sub eax, cyc
         mov base, eax
-        CPUID
+        LFENCE
         RDTSC
         mov cyc, eax
-        CPUID
+        LFENCE
         RDTSC
         sub eax, cyc
         mov base, eax
-        CPUID
+        LFENCE
         RDTSC
         mov cyc, eax
-        CPUID
+        LFENCE
         RDTSC
         sub eax, cyc
         mov base, eax
