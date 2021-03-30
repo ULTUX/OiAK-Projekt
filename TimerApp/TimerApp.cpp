@@ -51,6 +51,7 @@ void initializeWithCache() {
             __m128i testVal = _mm_loadu_si128(((__m128i*)Array) + (i - 4) / 4);
         }
     }
+
 }
 
 __int32 testWithoutCache() {
@@ -60,7 +61,10 @@ __int32 testWithoutCache() {
 
     cycles = start();
 
-    for (int i = 0; i < 200; i++) {
+    for (; i < 200; i++) {
+        __m128i data = _mm_stream_load_si128((__m128i*)(Array) + i);
+    }
+    for (; i < 200; i++) {
         __m128i data = _mm_stream_load_si128((__m128i*)(Array) + i);
     }
 
@@ -73,7 +77,10 @@ volatile __int32 testWithCache() {
     __m128i data;
     cycles = start();
 
-    for (; i < 1; i++) {
+    for (; i < 200; i++) {
+        data = _mm_loadu_si128((__m128i*)(Array) + i);
+    }
+    for (; i < 200; i++) {
         data = _mm_loadu_si128((__m128i*)(Array) + i);
     }
 
@@ -124,5 +131,5 @@ int main()
     latency -= base;
     printf("Latency:.............%d clock cycles (%f ns)", latency, latency / BASE_CLOCK);
 
-
+    return 0;
 }
