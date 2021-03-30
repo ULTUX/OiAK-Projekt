@@ -1,7 +1,4 @@
-﻿// CodeTesting.cpp : Ten plik zawiera funkcję „main”. W nim rozpoczyna się i kończy wykonywanie programu.
-//
-
-#include <iostream>
+﻿#include <iostream>
 #include <immintrin.h>
 using namespace std;
 
@@ -31,7 +28,7 @@ __int32 stop(int startCycles) {
 
 void initializeWithoutCache() {
     Array = new int[800];
-    while ((int)Array % 16 != 0) {
+    while (((uintptr_t)Array) % 16 != 0) {
         delete[800] Array;
         Array = new int[800];
     }
@@ -44,7 +41,7 @@ void initializeWithoutCache() {
 
 void initializeWithCache() {
     Array = new int[800];
-    while ((int)Array % 16 != 0) {
+    while (((uintptr_t)Array) % 16 != 0) {
         delete[800] Array;
         Array = new int[800];
     }
