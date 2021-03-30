@@ -5,6 +5,7 @@ using namespace std;
 int* Array;
 //Clock frequency in Ghz
 const float BASE_CLOCK = 3.56;
+const int SIZE = 1200; // Must divide by 4
 
 __int32 start() {
     __int32  cycles;
@@ -27,26 +28,26 @@ __int32 stop(int startCycles) {
 }
 
 void initializeWithoutCache() {
-    Array = new int[800];
+    Array = new int[SIZE];
     while (((uintptr_t)Array) % 16 != 0) {
-        delete[800] Array;
-        Array = new int[800];
+        delete[SIZE] Array;
+        Array = new int[SIZE];
     }
     //Load data to mem
-    for (int i = 0; i < 200; i++) {
+    for (int i = 0; i < SIZE/4; i++) {
         __m128i vals = _mm_setr_epi32(4 * i + 0, 4 * i + 1, 4 * i + 2, 4 * i + 3);
         _mm_stream_si128((__m128i*)Array + i, vals);
     }
 }
 
 void initializeWithCache() {
-    Array = new int[800];
+    Array = new int[SIZE];
     while (((uintptr_t)Array) % 16 != 0) {
-        delete[800] Array;
-        Array = new int[800];
+        delete[SIZE] Array;
+        Array = new int[SIZE];
     }
 
-    for (int i = 0; i < 800; i++) {
+    for (int i = 0; i < SIZE; i++) {
         Array[i] = i;
         if (i % 4 == 0 && i > 0) {
             __m128i testVal = _mm_loadu_si128(((__m128i*)Array) + (i - 4) / 4);
@@ -61,15 +62,9 @@ __int32 testWithoutCache() {
    __m128i data;
 
     cycles = start();
-
-    for (; i < 200; i++) {
+    for (; i < SIZE/4; i++) {
         __m128i data = _mm_stream_load_si128((__m128i*)(Array) + i);
     }
-    i = 0;
-    for (; i < 200; i++) {
-        __m128i data = _mm_stream_load_si128((__m128i*)(Array) + i);
-    }
-
     cycles = stop(cycles);
     return cycles;
 }
@@ -77,13 +72,13 @@ volatile __int32 testWithCache() {
     volatile __int32 cycles;
     volatile int i = 0;
     __m128i data;
-    cycles = start();
-
-    for (; i < 200; i++) {
+    //First run to make sure data is in cache
+    for (; i < SIZE/4; i++) {
         data = _mm_load_si128((__m128i*)(Array) + i);
     }
     i = 0;
-    for (; i < 200; i++) {
+    cycles = start();
+    for (; i < SIZE/4; i++) {
         data = _mm_load_si128((__m128i*)(Array) + i);
     }
 
@@ -97,6 +92,7 @@ int main()
     //initializeWithoutCache();
     unsigned base = 0;
     __int32 cyc = 0;
+    volatile int latency = 0;
     //Cache warming for timer func
     __asm {
         CPUID
@@ -121,11 +117,8 @@ int main()
         sub eax, cyc
         mov base, eax
     }
-    int latency = 0;
-    int j = 0;
     latency = testWithCache();
     //latency = testWithoutCache();
-    j++;
     printf("%d\n", latency);
     latency -= base;
     printf("Latency:.............%d clock cycles (%f ns)", latency, latency / BASE_CLOCK);
