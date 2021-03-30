@@ -52,10 +52,10 @@ RM = "C:\Program Files\CMake\bin\cmake.exe" -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\bulio\Documents\Coding\c++
+CMAKE_SOURCE_DIR = C:\Users\bulio\source\repos\TimerApp\gcc_version
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\bulio\Documents\Coding\c++\build
+CMAKE_BINARY_DIR = C:\Users\bulio\source\repos\TimerApp\gcc_version\build
 
 # Utility rule file for ContinuousSubmit.
 
@@ -81,6 +81,6 @@ CMakeFiles/ContinuousSubmit.dir/clean:
 .PHONY : CMakeFiles/ContinuousSubmit.dir/clean
 
 CMakeFiles/ContinuousSubmit.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\bulio\Documents\Coding\c++ C:\Users\bulio\Documents\Coding\c++ C:\Users\bulio\Documents\Coding\c++\build C:\Users\bulio\Documents\Coding\c++\build C:\Users\bulio\Documents\Coding\c++\build\CMakeFiles\ContinuousSubmit.dir\DependInfo.cmake --color=$(COLOR)
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\bulio\source\repos\TimerApp\gcc_version C:\Users\bulio\source\repos\TimerApp\gcc_version C:\Users\bulio\source\repos\TimerApp\gcc_version\build C:\Users\bulio\source\repos\TimerApp\gcc_version\build C:\Users\bulio\source\repos\TimerApp\gcc_version\build\CMakeFiles\ContinuousSubmit.dir\DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/ContinuousSubmit.dir/depend
 
