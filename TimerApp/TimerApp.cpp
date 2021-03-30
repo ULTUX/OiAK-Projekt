@@ -56,8 +56,7 @@ void initializeWithCache() {
 }
 
 __int32 testWithoutCache() {
-    volatile __int32 cycles1;
-
+    volatile __int32 cycles;
     volatile int i = 0;
    __m128i data;
 
