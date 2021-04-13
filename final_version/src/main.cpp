@@ -12,6 +12,6 @@ int main()
     int *cacheTest = testMultiple(startSize, increment, multiplier, count, true);
     int *noCacheTest = testMultiple(startSize, increment, multiplier, count, false);
 
-    CSVWriter(2.3, cacheTest, noCacheTest, count, startSize, increment, multiplier);
+    CSVWriter(3.56, cacheTest, noCacheTest, count, startSize, increment, multiplier);
     return 0;
 }
