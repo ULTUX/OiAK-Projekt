@@ -2,17 +2,11 @@
 #include <cstdio>
 #include <cinttypes>
 #include <iostream>
-#include <cpuid.h>
 
 // Windows
 #ifdef _WIN32
 
 #include <intrin.h>
-uint64_t rdtsc()
-{
-    return __rdtsc();
-}
-
 // Linux/GCC
 #else
 //#include <x86intrin.h>
@@ -24,6 +18,8 @@ uint64_t __rdtsc()
     return ((uint64_t)hi << 32) | lo;
 }
 #endif
+
+#include <cpuid.h>
 
 using namespace std;
 
