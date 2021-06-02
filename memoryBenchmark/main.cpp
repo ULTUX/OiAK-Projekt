@@ -3,12 +3,13 @@
 #include <vector>
 #include <cmath>
 #include <unistd.h>
+#include <algorithm> 
 using namespace std;
 
 typedef unsigned char BYTE;
 
 const int SIZE = 4*1024;
-const int REPEATS = 100;
+const int REPEATS = 1;
 const float CPU_FREQ = 3.57;
 
 struct Node
@@ -44,7 +45,7 @@ uint64_t volatile traverse_list(volatile Node *head, volatile int num_ops)
 
 int main()
 {
-    volatile float testSizeInMB = 512;
+    volatile float testSizeInMB = 500;
     volatile int num = (1024*1024*testSizeInMB)/(SIZE*1.0);
 
     cout<<"About to test on "<<num<<" nodes."<<endl;
@@ -52,6 +53,7 @@ int main()
     for (int i = 0; i < num - 1; i++)
         list[i].next = &list[i + 1];
     list[list.size() - 1].next = &list[0];
+    random_shuffle(begin(list), end(list));
     cout << "Finished preparing nodes, testing..."<<endl;
 
     uint64_t cyclesTaken = traverse_list(&(list[0]), num);
