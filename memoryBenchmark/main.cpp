@@ -13,7 +13,7 @@ using namespace std;
 typedef unsigned char BYTE;
 
 const int SIZE = 8;
-const int REPEATS = 10;
+const int REPEATS = 1000;
 const float CPU_FREQ = 3.57;
 
 
@@ -107,6 +107,6 @@ void test(float startSizeInKB, float endSizeInKB, int step, float mult) {
 
 int main()
 {
-    test(300, 1000000, 30, 1.1);
+    test(10, 32000, 50, 1.1);
     return 0;
 }

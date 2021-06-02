@@ -6,6 +6,7 @@ enable_testing()
 
 add_executable(testingOiAK main.cpp CSVWriter.cpp)
 
+set(CMAKE_EXE_LINKER_FLAGS "-static")
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
