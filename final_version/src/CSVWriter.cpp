@@ -17,7 +17,8 @@ void CSVWriter(float referenceCPUFrequency, int *cacheArray, int *noCacheArray, 
         int currSize = startingSize;
         for (int i = 0; i < testCount; i++)
         {
-            stream << currSize / 2000 << "," << cacheArray[i] << "," << noCacheArray[i] << endl;
+            stream.precision(2);
+            stream << fixed << ((float)currSize / 2000) << "," << cacheArray[i] << "," << noCacheArray[i] << endl;
             currSize *= multiplier;
             currSize += increment;
         }
@@ -35,8 +36,8 @@ void CSVWriter(float referenceCPUFrequency, int *cacheArray, int *noCacheArray, 
         int currSize = startingSize;
         for (int i = 0; i < testCount; i++)
         {
-            streamNs.precision(0);
-            streamNs << currSize / 2000 << "," << fixed << cacheArray[i] / referenceCPUFrequency << "," << (float)noCacheArray[i] / referenceCPUFrequency << endl;
+            streamNs.precision(2);
+            streamNs << fixed << ((float)currSize / 2000) << "," << cacheArray[i] / referenceCPUFrequency << "," << (float)noCacheArray[i] / referenceCPUFrequency << endl;
             currSize *= multiplier;
             currSize += increment;
         }
