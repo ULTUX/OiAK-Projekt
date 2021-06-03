@@ -1,8 +1,6 @@
 #include <iostream>
 #include <x86intrin.h>
 #include <vector>
-#include <cmath>
-#include <unistd.h>
 #include <algorithm>
 #include <string>
 #include "CSVWriter.h"
@@ -12,15 +10,14 @@ using namespace std;
 
 typedef unsigned char BYTE;
 
-const int SIZE = 8;
-const int REPEATS = 1000;
+const int REPEATS = 100;
 const float CPU_FREQ = 3.57;
 
 
 struct Node
 {
     Node *next;
-    BYTE padding[SIZE];
+    uint64_t t;
 };
 
 float volatile traverse_list(uint64_t size, volatile int num_ops)
@@ -61,7 +58,7 @@ float volatile traverse_list(uint64_t size, volatile int num_ops)
     stopTime = __rdtscp(&a);
     stopTime -= startTime;
     took = stopTime;
-    took = took - error;
+//    took = took - error;
 
     return (took)/((double)num_ops*REPEATS*size);
 }
@@ -107,6 +104,6 @@ void test(float startSizeInKB, float endSizeInKB, int step, float mult) {
 
 int main()
 {
-    test(10, 32000, 50, 1.1);
+    test(300, 1000000, 150, 1.1);
     return 0;
 }
