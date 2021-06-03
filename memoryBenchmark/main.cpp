@@ -10,7 +10,6 @@ using namespace std;
 
 typedef unsigned char BYTE;
 
-const int REPEATS = 100;
 const float CPU_FREQ = 3.57;
 
 
@@ -22,7 +21,6 @@ struct Node
 
 float volatile traverse_list(uint64_t size, volatile int num_ops)
 {
-    volatile int num_ops_curr = num_ops*REPEATS;
     unsigned int a;
     volatile uint64_t startTime, stopTime, error;
     volatile uint64_t took = 0;
@@ -58,12 +56,12 @@ float volatile traverse_list(uint64_t size, volatile int num_ops)
     stopTime = __rdtscp(&a);
     stopTime -= startTime;
     took = stopTime;
-//    took = took - error;
+    took = took - error;
 
-    return (took)/((double)num_ops*REPEATS*size);
+    return (took)/((double)num_ops*size);
 }
 
-void test(float startSizeInKB, float endSizeInKB, int step, float mult) {
+void test(float startSizeInKB, float endSizeInKB, int step, float mult, int repeats) {
 
     float size = startSizeInKB;
 
@@ -74,7 +72,6 @@ void test(float startSizeInKB, float endSizeInKB, int step, float mult) {
         size += step;
         itNum++;
     }
-    if (size > endSizeInKB) itNum--;
 
     double NsLatencyResult[itNum];
     string CSVheaders[] = {"Size [KB]", "Latency per mem access [ns]"};
@@ -85,7 +82,7 @@ void test(float startSizeInKB, float endSizeInKB, int step, float mult) {
         int nodeAmount = (1024*currSize)/sizeof(Node);
         cout<<"Iteration: "<<i<<" out of: "<<itNum<<endl;
 
-        float cyclesTaken = traverse_list(nodeAmount, REPEATS);
+        float cyclesTaken = traverse_list(nodeAmount, repeats);
         float inNs = cyclesTaken / CPU_FREQ;
         NsLatencyResult[i] = inNs;
         sizeArra[i] = nodeAmount*sizeof(Node)/(1024);
@@ -104,6 +101,7 @@ void test(float startSizeInKB, float endSizeInKB, int step, float mult) {
 
 int main()
 {
-    test(300, 1000000, 150, 1.1);
+    const int REPEATS = 500;
+    test(1, 1000000, 50, 1.35, REPEATS);
     return 0;
 }
