@@ -10,16 +10,27 @@ using namespace std;
 
 typedef unsigned char BYTE;
 
-const float CPU_FREQ = 3.57;
+/**
+ * @brief Current cpu frequency in GHz (should be modified depending on the machine).
+ */
+const float CPU_FREQ = 3.57;    //Current cpu frequency - SHOULD BE CHANGED
 
-
+//Declaration of structured that will be saved into the memory (every node has two 64-bit variables)
 struct Node
 {
     Node *next;
     uint64_t t;
 };
 
-float volatile traverse_list(uint64_t size, volatile int num_ops, bool isSequential)
+/**
+ * @brief Begin access time calculation and return this time based on input parameters.
+ * This function generates vector of Node structure and saves it into the memory. Then it performs read from memory.
+ * @param size Amount of nodes to be created.
+ * @param num_ops Number of repetitions for better result accuracy.
+ * @param isSequential If the data should be written to memory sequentially.
+ * @return Access time in nanoseconds.
+ */
+float volatile calcAccessTime(uint64_t size, volatile int num_ops, bool isSequential)
 {
     unsigned int a;
     volatile uint64_t startTime, stopTime, error;
@@ -61,6 +72,16 @@ float volatile traverse_list(uint64_t size, volatile int num_ops, bool isSequent
     return (took)/((double)num_ops*size);
 }
 
+/**
+ * @brief Start tests based on input params.
+ * This function performs tests based on input params and saves thge results into .csv file.
+ * @param startSizeInKB Starting size in KB.
+ * @param endSizeInKB Ending size in KB.
+ * @param step Step to increase current size every iteration.
+ * @param mult Value tobe multiplied by every iteration.
+ * @param repeats Amount of repetitions.
+ * @param isSequential Whether the memory reads should be squential.
+ */
 void test(float startSizeInKB, float endSizeInKB, int step, float mult, int repeats, bool isSequential) {
 
     float size = startSizeInKB;
@@ -82,7 +103,7 @@ void test(float startSizeInKB, float endSizeInKB, int step, float mult, int repe
         int nodeAmount = (1024*currSize)/sizeof(Node);
         cout<<"Iteration: "<<i<<" out of: "<<itNum<<endl;
 
-        float cyclesTaken = traverse_list(nodeAmount, repeats, isSequential);
+        float cyclesTaken = calcAccessTime(nodeAmount, repeats, isSequential);
         float inNs = cyclesTaken / CPU_FREQ;
         NsLatencyResult[i] = inNs;
         sizeArra[i] = nodeAmount*sizeof(Node)/(1024);
@@ -102,6 +123,6 @@ void test(float startSizeInKB, float endSizeInKB, int step, float mult, int repe
 int main()
 {
     const int REPEATS = 1000;
-    test(1, 50000, 100, 1.4, REPEATS, true);
+    test(100, 550000, 100, 1.3, REPEATS, true);
     return 0;
 }
