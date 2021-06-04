@@ -19,7 +19,7 @@ struct Node
     uint64_t t;
 };
 
-float volatile traverse_list(uint64_t size, volatile int num_ops)
+float volatile traverse_list(uint64_t size, volatile int num_ops, bool isSequential)
 {
     unsigned int a;
     volatile uint64_t startTime, stopTime, error;
@@ -33,7 +33,7 @@ float volatile traverse_list(uint64_t size, volatile int num_ops)
         nodes[i] = &mem[i];
     }
 
-    random_shuffle(begin(nodes), end(nodes));
+    if (!isSequential) random_shuffle(begin(nodes), end(nodes));
 
     for (uint64_t i = 0; i < size-1; i++) {
         nodes[i]->next = nodes[i+1];
@@ -61,7 +61,7 @@ float volatile traverse_list(uint64_t size, volatile int num_ops)
     return (took)/((double)num_ops*size);
 }
 
-void test(float startSizeInKB, float endSizeInKB, int step, float mult, int repeats) {
+void test(float startSizeInKB, float endSizeInKB, int step, float mult, int repeats, bool isSequential) {
 
     float size = startSizeInKB;
 
@@ -82,7 +82,7 @@ void test(float startSizeInKB, float endSizeInKB, int step, float mult, int repe
         int nodeAmount = (1024*currSize)/sizeof(Node);
         cout<<"Iteration: "<<i<<" out of: "<<itNum<<endl;
 
-        float cyclesTaken = traverse_list(nodeAmount, repeats);
+        float cyclesTaken = traverse_list(nodeAmount, repeats, isSequential);
         float inNs = cyclesTaken / CPU_FREQ;
         NsLatencyResult[i] = inNs;
         sizeArra[i] = nodeAmount*sizeof(Node)/(1024);
@@ -101,7 +101,7 @@ void test(float startSizeInKB, float endSizeInKB, int step, float mult, int repe
 
 int main()
 {
-    const int REPEATS = 500;
-    test(1, 1000000, 50, 1.35, REPEATS);
+    const int REPEATS = 1000;
+    test(1, 50000, 100, 1.4, REPEATS, true);
     return 0;
 }
