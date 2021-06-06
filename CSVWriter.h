@@ -47,6 +47,14 @@ private:
      */
     void writeData();
 public:
+    /**
+     * @brief Construct a new CSVWriter object, start writing to .csv file.
+     * 
+     * @param dataSize Amount of data points.
+     * @param columnWidth Amount of parallel data.
+     * @param headers Data names.
+     * @param data Data.
+     */
     CSVWriter(int dataSize, int columnWidth, string* headers, double** data);
 
 };
