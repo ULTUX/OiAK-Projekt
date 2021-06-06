@@ -102,6 +102,6 @@ void test(float startSizeInKB, float endSizeInKB, int step, float mult, int repe
 int main()
 {
     const int REPEATS = 1000;
-    test(1, 50000, 100, 1.4, REPEATS, true);
+    test(100, 100000, 100, 1.2, REPEATS, true);
     return 0;
 }
