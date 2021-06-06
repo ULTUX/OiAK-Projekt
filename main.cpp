@@ -8,6 +8,76 @@
 
 using namespace std;
 
+/**
+ * @brief Get the integer from stdin.
+ * 
+ * @param message Message to be displayed.
+ * @param mustPositive If the number should be positive.
+ * @return int Result
+ */
+int getIntegerInput(string message, bool mustPositive) {
+    bool isNum = false;
+    bool isPositive = false;
+    int val;
+    while (!isNum) {
+        cout << message;
+        string input;
+        cin.clear();
+        cin.sync();
+        getline(cin, input);
+        try {
+            val = stoi(input);
+            if (val >= 0) isPositive = true;
+            if (!mustPositive) isNum = true;
+            else if (isPositive) isNum = true;
+            else isNum = false;
+        } catch (invalid_argument &e) {
+            cout << "Wprowadzone dane nie sa liczba!" << endl;
+            continue;
+        }
+        catch (out_of_range &e) {
+            cout << "Wprowadzona liczba jest za duza!" << endl;
+            continue;
+        }
+    }
+    return val;
+}
+
+/**
+ * @brief Get float from stdin.
+ * 
+ * @param message Message to be displayed.
+ * @param mustPositive If the number should be positive.
+ * @return float Result
+ */
+float getFloatInput(string message, bool mustPositive) {
+    bool isNum = false;
+    bool isPositive = false;
+    float val;
+    while (!isNum) {
+        cout << message;
+        string input;
+        cin.clear();
+        cin.sync();
+        getline(cin, input);
+        try {
+            val = stof(input);
+            if (val >= 0) isPositive = true;
+            if (!mustPositive) isNum = true;
+            else if (isPositive) isNum = true;
+            else isNum = false;
+        } catch (invalid_argument &e) {
+            cout << "Wprowadzone dane nie sa liczba!" << endl;
+            continue;
+        }
+        catch (out_of_range &e) {
+            cout << "Wprowadzona liczba jest za duza!" << endl;
+            continue;
+        }
+    }
+    return val;
+}
+
 typedef unsigned char BYTE;
 
 /**
@@ -155,7 +225,11 @@ void test(float startSizeInKB, float endSizeInKB, int step, float mult, int repe
 
 int main()
 {
-    const int REPEATS = 1000;
-    test(100, 550000, 100, 1.3, REPEATS, true);
+    int start = getIntegerInput("Wielkosc startowa: ", true);
+    int stop = getIntegerInput("Wielkosc koncowa: ", true);
+    int repeats = getIntegerInput("Ilosc powtorzen: ", true);
+    bool seq = getIntegerInput("Odczyt sekwencyjny (0 - nie): ", true);
+    cout<<"Zaczynanie testow, przedzial: <"<<start<<"KB, "<<stop<<"KB>, powtorzenia: "<<repeats<<", odczyt sekwencyjny: "<<seq<<endl;
+    test(start, stop, 100, 1.3, repeats, seq);
     return 0;
 }
